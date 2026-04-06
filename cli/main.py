@@ -11,6 +11,7 @@ DB_FILE = os.path.join(DATA_DIR, "app.db")
 
 def get_db_con():
     con = sqlite3.connect(DB_FILE)
+    con.execute("PRAGMA foreign_keys = ON")
     return con
 
 def init_db():
@@ -75,7 +76,7 @@ class EntityManager:
         con = get_db_con()
         cur = con.cursor()
         for row in cur.execute("SELECT id, name, status FROM entities"):
-            print(row)
+            print(f"[{row[0]}] {row[1]} ({row[2]})")
         con.close()
 
 class TaskManager:
@@ -95,7 +96,7 @@ class TaskManager:
         con = get_db_con()
         cur = con.cursor()
         for row in cur.execute("SELECT id, title, status, entity_id FROM tasks"):
-            print(row)
+            print(f"[{row[0]}] {row[1]} ({row[2]})")
         con.close()
 
 class EventManager:
@@ -115,7 +116,7 @@ class EventManager:
         con = get_db_con()
         cur = con.cursor()
         for row in cur.execute("SELECT id, title, created_at FROM events WHERE entity_id = ?", (entity_id,)):
-            print(row)
+            print(f"[{row[0]}] {row[1]} \t({row[2]})")
         con.close()
 
 def main():
